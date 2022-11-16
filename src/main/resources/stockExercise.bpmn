@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1t3wi21" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="StockAssetReview" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Company name written" camunda:formKey="embedded:app:forms/enterCompanyName.html">
+      <bpmn:outgoing>Flow_03skq5d</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0e6rq04" name="Sell handled">
+      <bpmn:incoming>Flow_0xdaww8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_03skq5d" sourceRef="StartEvent_1" targetRef="service_task_find_a_symbol" />
+    <bpmn:serviceTask id="service_task_find_a_symbol" name="Find a symbol" camunda:delegateExpression="#{symbolAdapter}">
+      <bpmn:incoming>Flow_03skq5d</bpmn:incoming>
+      <bpmn:outgoing>Flow_14cjx2d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_14cjx2d" sourceRef="service_task_find_a_symbol" targetRef="service_task_get_price_and_change" />
+    <bpmn:serviceTask id="service_task_get_price_and_change" name="Get price and change" camunda:delegateExpression="#{priceAndChangeAdapter}">
+      <bpmn:incoming>Flow_14cjx2d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e85nce</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0e85nce" sourceRef="service_task_get_price_and_change" targetRef="gateway_approved" />
+    <bpmn:exclusiveGateway id="gateway_approved" name="Should sell ?">
+      <bpmn:incoming>Flow_0e85nce</bpmn:incoming>
+      <bpmn:outgoing>Flow_0eh0ckz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ucvn91</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0eh0ckz" name="no" sourceRef="gateway_approved" targetRef="Gateway_0qgceip">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{!approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ucvn91" name="yes" sourceRef="gateway_approved" targetRef="sell_approved_notification">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_0qgceip" name="Join">
+      <bpmn:incoming>Flow_0eh0ckz</bpmn:incoming>
+      <bpmn:incoming>Flow_1kt1iuo</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xdaww8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0xdaww8" sourceRef="Gateway_0qgceip" targetRef="Event_0e6rq04" />
+    <bpmn:sequenceFlow id="Flow_1kt1iuo" sourceRef="sell_approved_notification" targetRef="Gateway_0qgceip" />
+    <bpmn:userTask id="sell_approved_notification" name="Sell approved" camunda:formKey="embedded:app:forms/sellApproved.html">
+      <bpmn:incoming>Flow_0ucvn91</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kt1iuo</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="StockAssetReview">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="141" y="315" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ik4p23_di" bpmnElement="service_task_find_a_symbol">
+        <dc:Bounds x="340" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1s957it" bpmnElement="service_task_get_price_and_change">
+        <dc:Bounds x="500" y="250" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_06uv8z9_di" bpmnElement="gateway_approved" isMarkerVisible="true">
+        <dc:Bounds x="705" y="265" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="698" y="322" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0e6rq04_di" bpmnElement="Event_0e6rq04">
+        <dc:Bounds x="1082" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1070" y="315" width="61" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0qgceip_di" bpmnElement="Gateway_0qgceip" isMarkerVisible="true">
+        <dc:Bounds x="875" y="265" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="322" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1funocd_di" bpmnElement="sell_approved_notification">
+        <dc:Bounds x="680" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_03skq5d_di" bpmnElement="Flow_03skq5d">
+        <di:waypoint x="198" y="290" />
+        <di:waypoint x="340" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14cjx2d_di" bpmnElement="Flow_14cjx2d">
+        <di:waypoint x="440" y="290" />
+        <di:waypoint x="500" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e85nce_di" bpmnElement="Flow_0e85nce">
+        <di:waypoint x="600" y="290" />
+        <di:waypoint x="705" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eh0ckz_di" bpmnElement="Flow_0eh0ckz">
+        <di:waypoint x="755" y="290" />
+        <di:waypoint x="875" y="290" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="809" y="272" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ucvn91_di" bpmnElement="Flow_0ucvn91">
+        <di:waypoint x="730" y="265" />
+        <di:waypoint x="730" y="160" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="737" y="210" width="17" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xdaww8_di" bpmnElement="Flow_0xdaww8">
+        <di:waypoint x="925" y="290" />
+        <di:waypoint x="1082" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kt1iuo_di" bpmnElement="Flow_1kt1iuo">
+        <di:waypoint x="780" y="120" />
+        <di:waypoint x="900" y="120" />
+        <di:waypoint x="900" y="265" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
