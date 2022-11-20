@@ -1,3 +1,5 @@
 org\assignments\stockExercise\HttpHelper.class
+org\assignments\stockExercise\PriceAndChangeHandler.class
+org\assignments\stockExercise\SellApprovedHandler.class
 org\assignments\stockExercise\Application.class
 org\assignments\stockExercise\SymbolHandler.class
