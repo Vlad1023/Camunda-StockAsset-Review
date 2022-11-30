@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_0tiaclb" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.5.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <decision id="Decision_11v5gb5" name="decideOnApproval">
+    <decisionTable id="DecisionTable_040bavd">
+      <input id="Input_1" label="Price" biodi:width="192" camunda:inputVariable="#{price}">
+        <inputExpression id="InputExpression_1" typeRef="double">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0wpzrmn" label="Change" camunda:inputVariable="#{change}">
+        <inputExpression id="LiteralExpression_0il6u90" typeRef="double">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Should sell ?" name="shouldSell" typeRef="boolean" biodi:width="192" />
+      <rule id="DecisionRule_0m3nkn5">
+        <inputEntry id="UnaryTests_0fqaj0t">
+          <text>&lt; 1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1y2llui">
+          <text>&lt; 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10clmhw">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_022n1s6">
+        <inputEntry id="UnaryTests_0nk2gvg">
+          <text>&gt; 1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1u79jlw">
+          <text>&lt; 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_183gofg">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1fi1fcx">
+        <inputEntry id="UnaryTests_1nsy33l">
+          <text>&lt; 1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16a7rnb">
+          <text>&gt; 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1m42gr5">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1psgh7g">
+        <inputEntry id="UnaryTests_1ad4js0">
+          <text>&gt; 1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_031vgxq">
+          <text>&gt; 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10zbp71">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_11v5gb5">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
