@@ -3,6 +3,7 @@ package org.assignments.stockExercise;
 import camundajar.impl.com.google.gson.JsonObject;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.variable.Variables;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,12 @@ public class PriceAndChangeHandler implements JavaDelegate {
         JSONObject jsonObjectWrapper = HttpHelper.SendRequest(uri);
         JSONObject jsonObjectResult = jsonObjectWrapper.getJSONObject("Global Quote");
 
-        String change = (String) jsonObjectResult.get("09. change");
-        String price = (String) jsonObjectResult.get("05. price");
+        Double change = Double.parseDouble((String) jsonObjectResult.get("09. change"));
+        Double price = Double.parseDouble((String) jsonObjectResult.get("05. price"));
         delegateExecution.setVariable("change", change);
         delegateExecution.setVariable("price", price);
 
-        if(Float.parseFloat(price) < 1 && Float.parseFloat(change) < 0)
+        if(price < 1 && change < 0)
             delegateExecution.setVariable("approved", true);
         else{
             delegateExecution.setVariable("approved", false);
@@ -28,8 +29,8 @@ public class PriceAndChangeHandler implements JavaDelegate {
         }
 
 
-        System.out.println("Change = " + (String) delegateExecution.getVariable("change"));
-        System.out.println("Price = " + (String) delegateExecution.getVariable("price"));
+        //System.out.println("Change = " + (String) delegateExecution.getVariable("change"));
+        //System.out.println("Price = " + (String) delegateExecution.getVariable("price"));
 
     }
 }
